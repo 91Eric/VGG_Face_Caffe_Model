@@ -49,8 +49,7 @@ def compar_pic(path1,path2):
     feature2 = np.float64(out['fc7'])
     feature2=np.reshape(feature2,(test_num,4096))
     #求两个特征向量的cos值,并作为是否相似的依据
-    mt=pw.pairwise_distances(feature1, feature2, metric='cosine')
-    predicts=mt[0][0]
+    predicts=pw.cosine_similarity(feature1, feature2)
     return  predicts
 
 
@@ -73,7 +72,7 @@ def read_image(filelist):
 if __name__ == '__main__':
 
     #设置阈值,大于阈值是同一个人,反之
-    thershold=0.12
+    thershold=0.85
     #加载注册图片与验证图片
     #注意:人脸图像必须是N*N的!!!如果图片的高和宽不一样,进行归一化的时候会对图片进行拉伸,影响识别效果
     reg_path="./2-1.png"
@@ -82,7 +81,7 @@ if __name__ == '__main__':
     #计算注册图片与验证图片的相似度
     result=compar_pic(reg_path,rec_path)
     print "%s和%s两张图片的相似度是:%f\n\n"%(reg_path,rec_path,result)
-    if result<=thershold:
+    if result>=thershold:
         print '是一个人!!!!\n\n'
     else:
         print '不是同一个人!!!!\n\n'
