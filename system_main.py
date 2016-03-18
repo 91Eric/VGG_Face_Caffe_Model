@@ -129,8 +129,7 @@ def compar_pic(path1,path2):
     feature2=np.reshape(feature2,(test_num,4096))
     #np.savetxt('feature2.txt', feature2, delimiter=',')
     #求两个特征向量的cos值,并作为是否相似的依据
-    mt=pw.pairwise_distances(feature1, feature2, metric='cosine')
-    predicts=mt[0][0]
+    predicts=pw.cosine_similarity(feature1, feature2)
     return  predicts
 
 
@@ -228,10 +227,10 @@ if __name__ == '__main__':
                     tag=1
             if tag==1:
                 #阈值,大于这个值说明两个类的距离较远,不是一类
-                thershold=0.09
+                thershold=0.85
                 #把捕捉到的图片与注册的图片比较
                 result=recog(md,cv.QueryFrame(cam))
-                if result<=thershold:
+                if result>=thershold:
                     print result
                     print '验证成功!!!!\n\n'
                 else:
